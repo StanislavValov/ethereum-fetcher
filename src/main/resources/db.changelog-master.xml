@@ -7,7 +7,13 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet author="stan" id="1">
+        <sqlFile path="sql_extensions.sql" relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="stan" id="2">
         <sqlFile path="create_eth_transactions_table.sql" relativeToChangelogFile="true" />
+    </changeSet>
+    <changeSet author="stan" id="3">
+        <sqlFile path="create_users_table.sql" relativeToChangelogFile="true" />
     </changeSet>
 
 </databaseChangeLog>

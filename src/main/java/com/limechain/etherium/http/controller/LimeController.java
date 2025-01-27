@@ -1,22 +1,32 @@
 package com.limechain.etherium.http.controller;
 
 import com.limechain.etherium.domain.entity.EthTransactionEntity;
+import com.limechain.etherium.domain.service.AuthService;
 import com.limechain.etherium.domain.service.EthService;
-import com.limechain.etherium.http.request.AuthRequestDTO;
-import com.limechain.etherium.http.response.GwtTokenDTO;
+import com.limechain.etherium.domain.service.UserService;
+import com.limechain.etherium.http.request.LoginRequestDTO;
+import com.limechain.etherium.http.response.JwtResponseDTO;
 import com.limechain.etherium.http.response.TransactionsDTO;
+import com.limechain.etherium.utils.JwtUtil;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/lime")
 @AllArgsConstructor
 public class LimeController {
     public static final String TRANSACTION_HASHES = "transactionHashes";
+
     private EthService ethService;
+    private AuthService authService;
+    private UserService userService;
 
     @GetMapping("/eth")
     public ResponseEntity<TransactionsDTO> getTransactionsBy(@RequestParam(name = TRANSACTION_HASHES) List<String> transactionHashes) {
@@ -37,9 +47,19 @@ public class LimeController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<GwtTokenDTO> authenticate(@RequestBody AuthRequestDTO authRequestDTO) {
+    public ResponseEntity<?> authenticate(@RequestBody LoginRequestDTO loginRequestDTO) {
+        String token = authService.authenticate(loginRequestDTO.username(), loginRequestDTO.password());
 
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok(new JwtResponseDTO(token));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<?> getUserTransactions() {
+        try {
+            return null;
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
     }
 
     private TransactionsDTO adapt(List<EthTransactionEntity> ethTransactions) {

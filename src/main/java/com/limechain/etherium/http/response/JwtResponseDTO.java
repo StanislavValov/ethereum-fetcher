@@ -1,10 +1,11 @@
 package com.limechain.etherium.http.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
-public class GwtTokenDTO {
+@AllArgsConstructor
+public class JwtResponseDTO {
     private String token;
 }
