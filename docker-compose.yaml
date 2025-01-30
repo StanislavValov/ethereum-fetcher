@@ -16,17 +16,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   limeapi:
-    image: etherium
-    container_name: etherium
+    image: limeapi
+    container_name: limeapi
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/your_database_name
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
     ports:
-      - "8084:8084"
+      - "8080:8080"
     depends_on:
       - db
     networks:
@@ -34,6 +34,7 @@ services:
 
 networks:
   app-network:
+    name: app-network
     driver: bridge
 
 volumes:
