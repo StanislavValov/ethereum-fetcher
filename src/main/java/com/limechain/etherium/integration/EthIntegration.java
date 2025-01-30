@@ -3,15 +3,10 @@ package com.limechain.etherium.integration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthTransaction;
-import org.web3j.protocol.core.methods.response.ShhMessages;
-import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor

@@ -1,7 +1,6 @@
 package com.limechain.etherium.domain.service;
 
 import com.limechain.etherium.domain.entity.UserSearchHistoryEntity;
-import com.limechain.etherium.domain.repository.UserRepository;
 import com.limechain.etherium.domain.repository.UserSearchHistoryRepository;
 import com.limechain.etherium.utils.RlpUtil;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class UserHistoryService {
     private UserSearchHistoryRepository historyRepository;
-    private UserRepository repository;
 
     //TODO: remove transactional, use dynamicEntityGraph to avoid N+1 and other issues
     @Transactional
@@ -27,10 +25,10 @@ public class UserHistoryService {
         return entities;
     }
 
+    @Transactional
     public void storeUserSearchHistory(String username, String[] transactionHashes) {
         UserSearchHistoryEntity entity = adapt(username, transactionHashes);
         historyRepository.save(entity);
-        System.err.println();
     }
 
     private UserSearchHistoryEntity adapt(String username, String[] transactionHashes) {

@@ -15,7 +15,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  app:
+  limeapi:
     image: etherium
     container_name: etherium
     build:

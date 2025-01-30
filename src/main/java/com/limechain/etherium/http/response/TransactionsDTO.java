@@ -20,7 +20,7 @@ public class TransactionsDTO {
         private String transactionHash; // Hex encoded transaction hash
         private int transactionStatus;  // Status of the transaction (1 for success, 0 for failure)
         private String blockHash;       // Hex encoding of the block hash
-        private BigInteger blockNumber;       // Block number
+        private String blockNumber;       // Block number
         private String from;            // Ethereum address of the sender
         private String to;              // Ethereum address of the receiver (nullable)
         private String contractAddress; // Ethereum address of the created contract (nullable)

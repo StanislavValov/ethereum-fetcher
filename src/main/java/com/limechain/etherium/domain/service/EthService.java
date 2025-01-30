@@ -1,14 +1,17 @@
 package com.limechain.etherium.domain.service;
 
 import com.limechain.etherium.domain.entity.EthTransactionEntity;
-import com.limechain.etherium.integration.EthIntegration;
 import com.limechain.etherium.domain.repository.EthRepository;
+import com.limechain.etherium.integration.EthIntegration;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.EthTransaction;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
@@ -56,12 +59,12 @@ public class EthService {
                 .filter(Objects::nonNull)
                 .map(ethTransaction -> ethTransaction.getTransaction()
                         .map(transaction -> EthTransactionEntity.builder()
-                                .id(UUID.randomUUID())
                                 .input(transaction.getInput())
-                                .blockNumber(transaction.getBlockNumber())
+                                .blockNumber(String.valueOf(transaction.getBlockNumber()))
                                 .blockHash(transaction.getBlockHash())
                                 .value(transaction.getValueRaw())
                                 .fromAddress(transaction.getFrom())
+                                .toAddress(transaction.getTo())
                                 .transactionHash(transaction.getHash())
                                 .build())
                         .orElse(null))

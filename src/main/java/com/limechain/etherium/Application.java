@@ -12,7 +12,7 @@ import org.web3j.protocol.http.HttpService;
 @EnableJpaRepositories
 public class Application {
 //    private static final String ETH_NODE_URL = "https://cloudflare-eth.com";
-    private static final String ETH_NODE_URL = "https://mainnet.infura.io/v3/4d4e08c5cd904e33983f468bf8145387";
+    private static final String ETH_NODE_URL = "https://eth-mainnet.g.alchemy.com/v2/hC1A4pAje4zm_bNqXREHiBy0oigqzGam";
 
 
     public static void main(String[] args) {

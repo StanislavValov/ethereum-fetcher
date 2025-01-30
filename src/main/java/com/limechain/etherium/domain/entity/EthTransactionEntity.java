@@ -24,7 +24,7 @@ public class EthTransactionEntity {
     @Column
     private String blockHash;       // Hex encoding of the block hash
     @Column
-    private BigInteger blockNumber;       // Block number
+    private String blockNumber;       // Block number
     @Column
     private String fromAddress;            // Ethereum address of the sender
     @Column
