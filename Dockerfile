@@ -8,7 +8,7 @@ WORKDIR /app
 COPY target/etherium /app/etherium.jar
 
 # Use PostgreSQL official image to run PostgreSQL database
-FROM postgres:14
+FROM postgres:latest
 
 # Set PostgreSQL environment variables
 ENV POSTGRES_USER=postgres

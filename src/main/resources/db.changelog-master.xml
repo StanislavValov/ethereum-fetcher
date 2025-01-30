@@ -15,5 +15,8 @@
     <changeSet author="stan" id="3">
         <sqlFile path="create_users_table.sql" relativeToChangelogFile="true" />
     </changeSet>
+    <changeSet author="stan" id="4">
+        <sqlFile path="create_user_search_history_table.sql" relativeToChangelogFile="true" />
+    </changeSet>
 
 </databaseChangeLog>

@@ -1,38 +1,41 @@
 package com.limechain.etherium.http.controller;
 
 import com.limechain.etherium.domain.entity.EthTransactionEntity;
+import com.limechain.etherium.domain.entity.UserSearchHistoryEntity;
 import com.limechain.etherium.domain.service.AuthService;
 import com.limechain.etherium.domain.service.EthService;
-import com.limechain.etherium.domain.service.UserService;
+import com.limechain.etherium.domain.service.UserHistoryService;
 import com.limechain.etherium.http.request.LoginRequestDTO;
 import com.limechain.etherium.http.response.JwtResponseDTO;
 import com.limechain.etherium.http.response.TransactionsDTO;
-import com.limechain.etherium.utils.JwtUtil;
-import jakarta.servlet.http.HttpSession;
+import com.limechain.etherium.http.response.UserSearchHistoryDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.limechain.etherium.utils.RlpUtil.mapToRlpHex;
 
 @RestController
 @RequestMapping("/lime")
 @AllArgsConstructor
 public class LimeController {
-    public static final String TRANSACTION_HASHES = "transactionHashes";
+    private static final String TRANSACTION_HASHES = "transactionHashes";
+    private static final String USERNAME = "username";
 
     private EthService ethService;
     private AuthService authService;
-    private UserService userService;
+    private UserHistoryService userHistoryService;
 
     @GetMapping("/eth")
     public ResponseEntity<TransactionsDTO> getTransactionsBy(@RequestParam(name = TRANSACTION_HASHES) List<String> transactionHashes) {
         List<EthTransactionEntity> ethTransactions = ethService.findTransactionsByHash(transactionHashes);
 
-        TransactionsDTO response = adapt(ethTransactions);
+        TransactionsDTO response = this.toTransactionsDTO(ethTransactions);
 
         return ResponseEntity.ok().body(response);
     }
@@ -41,7 +44,7 @@ public class LimeController {
     public ResponseEntity<TransactionsDTO> getAllTransactions() {
         List<EthTransactionEntity> ethTransactions = ethService.findAllTransactions();
 
-        TransactionsDTO response = adapt(ethTransactions);
+        TransactionsDTO response = this.toTransactionsDTO(ethTransactions);
 
         return ResponseEntity.ok().body(response);
     }
@@ -54,15 +57,21 @@ public class LimeController {
     }
 
     @GetMapping("/my")
-    public ResponseEntity<?> getUserTransactions() {
+    public ResponseEntity<?> getUserTransactions(HttpServletRequest request) {
         try {
-            return null;
+            String username = (String) request.getAttribute(USERNAME);
+
+            List<UserSearchHistoryEntity> userSearchHistory = userHistoryService.getUserSearchesAsRlp(username);
+
+            List<UserSearchHistoryDTO> dto = toHistoryDTO(userSearchHistory);
+
+            return ResponseEntity.ok(dto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
         }
     }
 
-    private TransactionsDTO adapt(List<EthTransactionEntity> ethTransactions) {
+    private TransactionsDTO toTransactionsDTO(List<EthTransactionEntity> ethTransactions) {
         TransactionsDTO response = new TransactionsDTO();
 
         List<TransactionsDTO.Transaction> list = ethTransactions.stream()
@@ -81,5 +90,19 @@ public class LimeController {
         response.setTransactions(list);
 
         return response;
+    }
+
+    private List<UserSearchHistoryDTO> toHistoryDTO(List<UserSearchHistoryEntity> entities) {
+        return entities.stream()
+                .map(entity -> {
+                    String aggregatedTransactionHashes = mapToRlpHex(entity.getTransactionHashSet());
+                    return new UserSearchHistoryDTO(
+                            entity.getId(),
+                            entity.getUsername(),
+                            aggregatedTransactionHashes,
+                            entity.getSearchedAt()
+                    );
+                })
+                .collect(Collectors.toList());
     }
 }

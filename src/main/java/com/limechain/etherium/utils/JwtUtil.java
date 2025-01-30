@@ -65,9 +65,4 @@ public class JwtUtil {
             return false; // Invalid token
         }
     }
-
-    public String extractJwtFromRequest(HttpServletRequest request) {
-        return request.getHeader("AUTH_TOKEN");
-    }
-
 }

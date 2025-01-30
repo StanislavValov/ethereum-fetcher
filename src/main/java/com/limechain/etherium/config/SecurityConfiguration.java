@@ -9,6 +9,7 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,18 +22,16 @@ import java.util.List;
 @EnableWebSecurity
 @EnableMethodSecurity
 class SecurityConfiguration {
+    @Configuration
+    @EnableWebSecurity
+    public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter filter) throws Exception {
-        http.csrf().disable()
-                .authorizeHttpRequests()
-                .requestMatchers("/lime/authenticate").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter filter) throws Exception {
+            http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(requestMatcherRegistry -> requestMatcherRegistry.requestMatchers("/lime/authenticate").permitAll().anyRequest().authenticated()).addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class); // Add your custom JWT filter
 
-        return http.build();
+            return http.build();
+        }
     }
 
     @Bean

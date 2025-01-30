@@ -1,6 +1,5 @@
 package com.limechain.etherium.domain.repository;
 
-import com.limechain.etherium.domain.entity.EthTransactionEntity;
 import com.limechain.etherium.domain.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
