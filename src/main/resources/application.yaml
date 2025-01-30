@@ -28,3 +28,5 @@ spring:
         order_updates: true
         order_inserts: true
     open-in-view: false
+web3j:
+  ethNodeUrl: ${ETH_NODE_URL}

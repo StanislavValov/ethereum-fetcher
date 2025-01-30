@@ -1,6 +1,7 @@
 package com.limechain.limeapi;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +12,8 @@ import org.web3j.protocol.http.HttpService;
 @SpringBootApplication
 @EnableJpaRepositories
 public class Application {
-//    private static final String ETH_NODE_URL = "https://cloudflare-eth.com";
-    private static final String ETH_NODE_URL = "https://eth-mainnet.g.alchemy.com/v2/hC1A4pAje4zm_bNqXREHiBy0oigqzGam";
-
+    @Value("${web3j.ethNodeUrl}")
+    private String ethNodeUrl;
 
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.configure().load();
@@ -25,6 +25,6 @@ public class Application {
 
     @Bean
     public Web3j getWeb3Client() {
-        return Web3j.build(new HttpService(ETH_NODE_URL));
+        return Web3j.build(new HttpService(ethNodeUrl));
     }
 }
