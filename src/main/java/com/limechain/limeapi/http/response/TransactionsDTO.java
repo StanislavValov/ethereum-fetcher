@@ -1,14 +1,12 @@
 package com.limechain.limeapi.http.response;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 public class TransactionsDTO {
 
     private List<Transaction> transactions;
